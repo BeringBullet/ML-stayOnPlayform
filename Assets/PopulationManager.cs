@@ -64,7 +64,8 @@ public class PopulationManager : MonoBehaviour
 
     void BreeNewPopulation()
     {
-        List<GameObject> sortedList = population.OrderBy(o => o.GetComponent<Brain>().timeAlive).ToList();
+        List<GameObject> sortedList = 
+            population.OrderBy(o => ((o.GetComponent<Brain>().timeWalking * 5) + o.GetComponent<Brain>().timeAlive)).ToList();
         population.Clear();
 
         for (int i = (int)(sortedList.Count / 2.0) - 1; i < sortedList.Count - 1; i++)

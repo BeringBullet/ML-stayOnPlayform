@@ -7,16 +7,27 @@ public class Brain : MonoBehaviour
 
     int DNALength = 2;
     public float timeAlive;
+    public float timeWalking;
     public DNA dna;
     public GameObject eyes;
     bool alive = true;
     bool seeGround = true;
+    public GameObject ethanPrefab;
+    GameObject ethan;
 
+
+    private void OnDestroy()
+    {
+        Destroy(ethan);
+    }
 
     private void OnCollisionEnter(Collision obj)
     {
+       
         if (obj.gameObject.tag == "dead")
         {
+            timeAlive = 0;
+            timeWalking = 0;
             alive = false;
         }
     }
@@ -30,6 +41,8 @@ public class Brain : MonoBehaviour
         dna = new DNA(DNALength, 3);
         timeAlive = 0;
         alive = true;
+        ethan = Instantiate(ethanPrefab, this.transform.position, this.transform.rotation);
+        ethan.GetComponent<UnityStandardAssets.Characters.ThirdPerson.AICharacterControl>().target = this.transform;
     }
 
     // Start is called before the first frame update
@@ -43,7 +56,7 @@ public class Brain : MonoBehaviour
     {
         if (!alive) return;
 
-        Debug.DrawRay(eyes.transform.position, eyes.transform.forward * 10, Color.red, 10);
+        //Debug.DrawRay(eyes.transform.position, eyes.transform.forward * 10, Color.red, 10);
         seeGround = false;
         RaycastHit hit;
         if (Physics.Raycast(eyes.transform.position, eyes.transform.forward * 10, out hit))
@@ -61,13 +74,13 @@ public class Brain : MonoBehaviour
         if (seeGround)
         {
             //make v relative to character and alway move forward
-            if (dna.GetGene(0) == 0) move = 1;
+            if (dna.GetGene(0) == 0) { move = 1; timeWalking++; }
             else if (dna.GetGene(0) == 1) turn = -90;
             else if (dna.GetGene(0) == 1) turn = 90;
         }
         else
         {
-            if (dna.GetGene(1) == 0) move = 1;
+            if (dna.GetGene(1) == 0) { move = 1; timeWalking++; }
             else if (dna.GetGene(1) == 1) turn = -90;
             else if (dna.GetGene(1) == 1) turn = 90;
         }
