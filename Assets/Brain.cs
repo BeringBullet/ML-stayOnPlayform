@@ -43,7 +43,7 @@ public class Brain : MonoBehaviour
     {
         if (!alive) return;
 
-        Debug.DrawLine(eyes.transform.position, eyes.transform.forward * 10, Color.red, 10);
+        Debug.DrawRay(eyes.transform.position, eyes.transform.forward * 10, Color.red, 10);
         seeGround = false;
         RaycastHit hit;
         if (Physics.Raycast(eyes.transform.position, eyes.transform.forward * 10, out hit))
